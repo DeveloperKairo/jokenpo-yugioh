@@ -13,7 +13,7 @@ const state = {
     player: document.getElementById("player-field-card"),
     playerBOX: document.querySelector("#player-cards"),
     computer: document.getElementById("computer-field-card"),
-    computerBOX: document.querySelector("#computer-cards"),
+    computerBOX: document.querySelector("#player-cards"),
   },
   playerSides:{
   player: "player-cards",
@@ -48,8 +48,8 @@ const cardData = [
     name: "Exodia",
     type: "Scissors",
     img: `${pathImages}exodia.png`,
-    WinOf:[0],
-    LoseOf:[1],
+    WinOf:[1],
+    LoseOf:[2],
   }
 ]
 
@@ -65,24 +65,18 @@ async function createCardImage(IdCard, fieldSide){
   cardImage.setAttribute("data-id", IdCard);
   cardImage.classList.add("card");
 
-  if(fieldSide === state.playerSides.player){
+  if(fieldSide === playerSides.player){
     cardImage.addEventListener("click", () => {
-      const bgm = document.getElementById("bgm");
-      if (bgm.paused) {
-        bgm.play().catch(err => console.log("Erro ao tocar BGM:", err));
-      }
-      
       setCardsField(cardImage.getAttribute("data-id"));
     });
 
     cardImage.addEventListener("mouseover", () => {
-      drawSelectCard(IdCard);
+    drawSelectCard(IdCard);
     });
   }
 
   return cardImage;
 }
-
 
 async function setCardsField(cardId){
   await removeAllCardsImages();
@@ -142,7 +136,7 @@ async function checkDuelResults(playerCardId, ComputerCardId){
     state.score.playerScore++;
   }
 
-  if(playerCard.LoseOf.includes(ComputerCardId)){
+  if(playerCard.WinOf.includes(ComputerCardId)){
     duelResults = "lose";
     state.score.computerScore++;
   }  
@@ -153,7 +147,7 @@ async function checkDuelResults(playerCardId, ComputerCardId){
 }
 
 async function removeAllCardsImages(){
-  let { computerBOX, playerBOX } = state.fieldCards;
+  let { computerBOX, playerBOX } = state.playerSides;
   let imgElements = computerBOX.querySelectorAll("img");
   imgElements.forEach((img) => img.remove());
 
@@ -197,13 +191,11 @@ async function playAudio(status){
 function init() {
   showHiddenCardFieldsImages(false);
 
-  drawCards(5, state.playerSides.player);
-  drawCards(5, state.playerSides.computer);
+  drawCards(5, playerSides.player);
+  drawCards(5, playerSides.computer);
 
   const bgm = document.getElementById("bgm");
-  bgm.play().catch(() => {
-    console.log("clique em uma carta para iniciar o BGM");
-  })
+  bgm.play();
 }
 
 init();
