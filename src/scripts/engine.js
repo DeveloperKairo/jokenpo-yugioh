@@ -13,7 +13,7 @@ const state = {
     player: document.getElementById("player-field-card"),
     playerBOX: document.querySelector("#player-cards"),
     computer: document.getElementById("computer-field-card"),
-    computerBOX: document.querySelector("#player-cards"),
+    computerBOX: document.querySelector("#computer-cards"),
   },
   playerSides:{
   player: "player-cards",
@@ -48,8 +48,8 @@ const cardData = [
     name: "Exodia",
     type: "Scissors",
     img: `${pathImages}exodia.png`,
-    WinOf:[1],
-    LoseOf:[2],
+    WinOf:[0],
+    LoseOf:[1],
   }
 ]
 
@@ -136,7 +136,7 @@ async function checkDuelResults(playerCardId, ComputerCardId){
     state.score.playerScore++;
   }
 
-  if(playerCard.WinOf.includes(ComputerCardId)){
+  if(playerCard.LoseOf.includes(ComputerCardId)){
     duelResults = "lose";
     state.score.computerScore++;
   }  
@@ -147,7 +147,7 @@ async function checkDuelResults(playerCardId, ComputerCardId){
 }
 
 async function removeAllCardsImages(){
-  let { computerBOX, playerBOX } = state.playerSides;
+  let { computerBOX, playerBOX } = state.fieldCards;
   let imgElements = computerBOX.querySelectorAll("img");
   imgElements.forEach((img) => img.remove());
 
