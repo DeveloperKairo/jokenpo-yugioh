@@ -65,18 +65,24 @@ async function createCardImage(IdCard, fieldSide){
   cardImage.setAttribute("data-id", IdCard);
   cardImage.classList.add("card");
 
-  if(fieldSide === playerSides.player){
+  if(fieldSide === state.playerSides.player){
     cardImage.addEventListener("click", () => {
+      const bgm = document.getElementById("bgm");
+      if (bgm.paused) {
+        bgm.play().catch(err => console.log("Erro ao tocar BGM:", err));
+      }
+      
       setCardsField(cardImage.getAttribute("data-id"));
     });
 
     cardImage.addEventListener("mouseover", () => {
-    drawSelectCard(IdCard);
+      drawSelectCard(IdCard);
     });
   }
 
   return cardImage;
 }
+
 
 async function setCardsField(cardId){
   await removeAllCardsImages();
